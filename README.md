@@ -20,7 +20,12 @@ Fix bug with youtube-dl download
 sudo apt-get install ffmpeg
 ```
 
-Change the api key for spotify with your own key [Spotify Developer App](https://developer.spotify.com/dashboard/login) to make it work in `rest/rest.py` and `examples/random_link.py` and `examples/spotify_link.py`
+Change the api key for spotify with your own key [Spotify Developer App](https://developer.spotify.com/dashboard/login) to make it work in 
+
+- `rest/rest.py`
+- `examples/random_link.py`
+- `examples/spotify_link.py`
+
 ```python
 # Spotipy Client ID
 SPOTIPYCLIENTID = "SPOTIPY_CLIENT_ID"
@@ -45,10 +50,6 @@ python3 random_link.py data/random-list.txt --output random
 Download a list of link of youtube video
 ```bash  
 python3 youtube_list.py data/youtube-list.txt --output youtube
-```
-Write the list of link in a youtube playlist
-```bash  
-python3 youtube_playlist.py "https://www.youtube.com/playlist?list=PLrhzvIcii6GNjpARdnO4ueTUAVR9eMBpc" --output youtube
 ```
 
 ### SoundCloud
@@ -90,7 +91,7 @@ curl -X GET http://127.0.0.1:5000/api/playlist/download_0.zip
 python3 rest.py
 ```
 
-open that`\rest\index.html` or http://127.0.0.1:5000/index.html in a browser
+open that`\rest\index.html` or `http://127.0.0.1:5000/index.html` in a browser
 - choose file
 - read file
 - save new file

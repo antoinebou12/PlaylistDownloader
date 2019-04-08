@@ -6,3 +6,4 @@ spotipy
 scdl
 bs4
 flask
+flask_restful
