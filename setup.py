@@ -8,7 +8,7 @@ ns_version = runpy.run_path('version.py')
 # Package meta-data.
 NAME = 'PlaylistToMP3S'
 DESCRIPTION = 'Download a playlist (spotify, youtube) by finding  download the mp3 of the music video youtube'
-URL = 'https://gitlab.com/antoinebou13/playlisttomp3s'
+URL = 'https://github.com/antoinebou13/playlisttomp3s'
 EMAIL = 'antoine.bou13@gmail.com'
 AUTHOR = 'Antoine Boucher'
 REQUIRES_PYTHON = '>=3.6.0'

@@ -1,12 +1,16 @@
 #!/usr/bin/env python3
 import argparse
 import argcomplete
+import configparser
 
-from playlistdownloader.downloader import PlaylistDownloader, TypePlaylist
+from playlistdownloader.downloader import PlaylistDownloader
+
+config = configparser.ConfigParser()
+config.read('../spotipy_api_key.ini')
 
 # Spotipy Client ID
-SPOTIPYCLIENTID = "SPOTIPY_CLIENT_ID"
-SPOTIPYCLIENTSECRET = "SPOTIPY_CLIENT_SECRET"
+SPOTIPYCLIENTID = config['Spotify']['spotipyclientid']
+SPOTIPYCLIENTSECRET = config['Spotify']['spotipyclientsecret']
 
 class Main(object):
     def __init__(self):

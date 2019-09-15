@@ -2,9 +2,9 @@ from unittest import TestCase
 import pytest
 
 import os
-import time
 import tempfile
 import shutil
+import configparser
 
 from playlistdownloader.downloader import SoundCloudPlaylistFile, YoutubePlaylistFile, SpotifyPlaylistFile
 
@@ -73,7 +73,7 @@ class TestYoutubePlaylistFile(TestCase):
         shutil.rmtree(self.dirpath)
 
 
-# TODO Spotify
+# TODO Write test for spotify with api key
 class TestSpotifyPlaylistFile(TestCase):
 
     def setUp(self):

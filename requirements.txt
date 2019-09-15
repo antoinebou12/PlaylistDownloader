@@ -7,3 +7,4 @@ scdl
 bs4
 flask
 flask_restful
+configparser

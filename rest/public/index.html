@@ -17,7 +17,7 @@
         <li>Download playlist with the name filename with extension</li>
     </ul>
     <div class="container form-inline">
-        <form method="POST" action="http://127.0.0.1:5000/api/upload" enctype=multipart/form-data target="formDestination">
+        <form method="POST" action="http://vps245309.vps.ovh.ca:5000/api/upload" enctype=multipart/form-data target="formDestination">
             <div class="custom-control-inline mb-3">
                 <div class="custom-file file-upload-wrapper">
                     <input class="form-control custom-file-input file-upload" type="file" id="file" name="file" oninput="readFile()" accept=".txt"/>
@@ -105,12 +105,12 @@
    // https://stackoverflow.com/questions/21479107/saving-html5-textarea-contents-to-file
   function downloadPlaylist(){
         let text = document.getElementById("pfname").value;
-        const urlAPI ='http://127.0.0.1:5000/api/downloader/' + text;
+        const urlAPI ='http://vps245309.vps.ovh.ca:5000/api/downloader/' + text;
         let request = $.ajax({
             url: urlAPI,
             type: 'GET',
             success: function(data) {
-                document.getElementById("apiframe").src = 'http://127.0.0.1:5000/api/playlist/' + data['fname'];
+                document.getElementById("apiframe").src = 'http://vps245309.vps.ovh.ca:5000/api/playlist/' + data['fname'];
             },
             error: function() {
                 alert('Error occured');
