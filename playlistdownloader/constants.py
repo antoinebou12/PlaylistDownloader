@@ -9,7 +9,7 @@ class TypePlaylist(Enum):
     YOUTUBE = 2
     SPOTIFY = 3
 
-
+# File playlist type dict
 TYPE_PLAYLIST = {
     'other': -1,
     'song_name': 0,
@@ -17,3 +17,5 @@ TYPE_PLAYLIST = {
     'youtube': 2,
     'spotify': 3
 }
+
+# TYPE_PLAYLIST_INDEX = invert_dict(TYPE_PLAYLIST)

@@ -6,11 +6,11 @@ import configparser
 from playlistdownloader.downloader import PlaylistDownloader
 
 config = configparser.ConfigParser()
-config.read('../spotipy_api_key.ini')
+config.read('spotipy_api_key.ini')
 
 # Spotipy Client ID
-SPOTIPYCLIENTID = config['Spotify']['spotipyclientid']
-SPOTIPYCLIENTSECRET = config['Spotify']['spotipyclientsecret']
+SPOTIPYCLIENTID = config.get('SPOTIFY', 'spotipyclientid')
+SPOTIPYCLIENTSECRET = config.get('SPOTIFY', 'spotipyclientsecret')
 
 class Main(object):
     def __init__(self):
@@ -45,7 +45,7 @@ class Main(object):
         # load the list of list
         song_list_link = PLD.load_playlist(self._args.input)
 
-        PLD.download_playlist(song_list_link, out=self._args.output, compress=True)
+        PLD.download_playlist(song_list_link, out=self._args.output, compress=False)
 
 
 if __name__ == '__main__':

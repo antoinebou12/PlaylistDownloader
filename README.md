@@ -1,16 +1,21 @@
-# PlaylistToMP3s
-Learn python so i made a playlist downloader
+# PlaylistDownloader
+This is a project to download mp3 file (song, etc) for multiple provider with a easy python extension of existing library, but this project extends on this
+- downloader that auto detect the provider of the audio file required
+- with a rest-api that parse list of playlist or song in a text file
 
 [youtube-dl](https://github.com/ytdl-org/youtube-dl) got pretty much all those feature. this program is basically a wrapper to youtube-dl
 
 Download a playlist (spotify, youtube) by finding  download the mp3 of the music video youtube
 
 ## Install
+_For now the Windows is not that well supported_
 
 Install all require package
 ```bash
 python3 setup.py install --user
 ```
+
+Ubuntu and WSL
 Fix bug with youtube search with youtube-dl
 ```bash
 ./scripts/youtube-dl.sh
@@ -32,6 +37,12 @@ SPOTIPYCLIENTID = "SPOTIPY_CLIENT_ID"
 SPOTIPYCLIENTSECRET = "SPOTIPY_CLIENT_ID"
 ```
 
+### TODO
+
+- [] no API key for spotify
+- [] add more provider
+
+
 ## How To Use
 Work with different music platform like 
 - soundcloud, 
@@ -42,21 +53,21 @@ Work with different music platform like
 Download a playlists containing link for the 3 different services
 
 ```bash  
-python3 random_link.py data/random-list.txt --output random
+python3 random-playlink.py data/random-list.txt --output random
 ```
 
 ### Youtube
 
 Download a list of link of youtube video
 ```bash  
-python3 youtube_list.py data/youtube-list.txt --output youtube
+python3 youtube-playlist.py data/youtube-list.txt --output youtube
 ```
 
 ### SoundCloud
 
 Download a list of link of soundcloud
 ```bash  
-python3 soundcloud_list.py data/soundcloud-list.txt --output soundcloud
+python3 soundcloud-playlist.py data/soundcloud-list.txt --output soundcloud
 ```
 
 ### Spotify
@@ -73,7 +84,13 @@ Get Spotify link for the playlist id and username
 ![Get Spotify link for the playlist id](image/spotify_uri.jpg "Spotify URI GET")
 
 ## Rest API
+### TODO
 
+- [] Change the rest api to not save data locally on the server
+- [] Cleaner simpler UI
+- [] Simpler installation and setup
+- [] 
+- [] Add more provider
 ### Start server
 
  ```bash  
