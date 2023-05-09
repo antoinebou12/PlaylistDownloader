@@ -1,18 +1,21 @@
+import os
+import re
 from asyncio import as_completed
 from concurrent.futures import ThreadPoolExecutor
 
+import requests
 import youtube_dl
 
-from playlistdownloader.playlist.PlaylistStrategy import PlaylistStrategyAbstract
+from playlist_downloader.playlist.PlaylistStrategy import PlaylistStrategyAbstract
 
 
-class SpotifyPlaylistFile(PlaylistStrategyAbstract):
+class SpotifyPlaylist(PlaylistStrategyAbstract):
     """
     Strategy used for spotify link (playlist)
     """
 
     def __init__(self, spotipyid=None, spotipysecret=None) -> None:
-        super(SpotifyPlaylistFile).__init__()
+        super(SpotifyPlaylist).__init__()
 
         self.loaded_playlist = None
 
@@ -194,7 +197,7 @@ class SpotifyPlaylistFile(PlaylistStrategyAbstract):
         :return:
         """
         regex_id = ".*?(?:[a-z][a-z]+).*?(?:[a-z][a-z]+).*?(?:[a-z][a-z]+).*?(?:[a-z][a-z]+).*?(?:[a-z][a-z]+).*?((?:[a-z][a-z]+))"
-        rg = re.compile(regex_id, re.IGNORECASE | re.DOTALL)
+        rg = re.compile(regex_id, re.IGNORECASE | requests.DOTALL)
         return result.group(1) if (result := rg.search(link)) else ""
 
     @staticmethod

@@ -2,8 +2,8 @@ import configparser
 
 import typer
 
-from playlistdownloader.downloader import PlaylistDownloader
-from playlistdownloader.downloader import TypePlaylist
+from playlist_downloader.downloader import PlaylistDownloader
+from playlist_downloader.downloader import TypePlaylist
 
 config = configparser.ConfigParser()
 config.read("../spotipy_api_key.ini")

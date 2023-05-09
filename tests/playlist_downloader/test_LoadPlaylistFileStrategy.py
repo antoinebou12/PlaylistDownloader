@@ -2,9 +2,9 @@ import os
 
 import pytest
 
-from playlistdownloader.downloader import SoundCloudPlaylistFile
-from playlistdownloader.downloader import SpotifyPlaylistFile
-from playlistdownloader.downloader import YoutubePlaylistFile
+from playlist_downloader.downloader import SoundCloudPlaylistFile
+from playlist_downloader.downloader import SpotifyPlaylistFile
+from playlist_downloader.downloader import YoutubePlaylistFile
 
 
 class UtilsFunc:

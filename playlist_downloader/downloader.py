@@ -4,13 +4,13 @@ from concurrent.futures import as_completed
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-from playlistdownloader import recognition_link
-from playlistdownloader import SongNamePlaylistFile
-from playlistdownloader import SoundCloudPlaylistFile
-from playlistdownloader import SpotifyPlaylistFile
-from playlistdownloader import TypePlaylist
-from playlistdownloader import YoutubePlaylistFile
-from playlistdownloader import zipdir
+from playlist_downloader import recognition_link
+from playlist_downloader import TypePlaylist
+from playlist_downloader import zipdir
+from playlist_downloader.playlist.Song import SongNamePlaylist
+from playlist_downloader.playlist.SoundCloud import SoundCloudPlaylist
+from playlist_downloader.playlist.Spotify import SpotifyPlaylist
+from playlist_downloader.playlist.Youtube import YoutubePlaylist
 
 
 class PlaylistDownloader:
@@ -26,13 +26,13 @@ class PlaylistDownloader:
         self.spotipysecret = spotipysecret
 
         strategies = {
-            TypePlaylist.SONG_NAME.value: SongNamePlaylistFile(),
-            TypePlaylist.SOUNDCLOUD.value: SoundCloudPlaylistFile(),
-            TypePlaylist.YOUTUBE.value: YoutubePlaylistFile(),
-            TypePlaylist.SPOTIFY.value: SpotifyPlaylistFile(spotipyid, spotipysecret),
+            TypePlaylist.SONG_NAME.value: SongNamePlaylist(),
+            TypePlaylist.SOUNDCLOUD.value: SoundCloudPlaylist(),
+            TypePlaylist.YOUTUBE.value: YoutubePlaylist(),
+            TypePlaylist.SPOTIFY.value: SpotifyPlaylist(spotipyid, spotipysecret),
         }
 
-        self._type_strategy = strategies.get(playlist_type, SongNamePlaylistFile())
+        self._type_strategy = strategies.get(playlist_type, SongNamePlaylist())
 
     def load_playlist(self, *args, **kwargs):
         return self.type_strategy.load_playlist(*args, **kwargs)

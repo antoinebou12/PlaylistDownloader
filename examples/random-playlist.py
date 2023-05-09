@@ -3,7 +3,7 @@ import configparser
 import typer
 from rich.console import Console
 
-from playlistdownloader.downloader import PlaylistDownloader
+from playlist_downloader.playlist.PlaylistStrategy import MusicDownloader
 
 config = configparser.ConfigParser()
 config.read("spotipy_api_key.ini")
@@ -28,7 +28,7 @@ def main(
         SPOTIPYCLIENTSECRET, help="spotipy client-secret"
     ),
 ):
-    PLD = PlaylistDownloader(spotipyid=spotipyid, spotipysecret=spotipysecret)
+    PLD = MusicDownloader(spotipyid=spotipyid, spotipysecret=spotipysecret)
     # load the list of list
     song_list_link = PLD.load_playlist(input)
 

@@ -9,8 +9,8 @@ from flask_restful import Api
 from flask_restful import Resource
 from werkzeug.utils import secure_filename
 
-from playlistdownloader.downloader import PlaylistDownloader
-from playlistdownloader.downloader import TypePlaylist
+from playlist_downloader.downloader import PlaylistDownloader
+from playlist_downloader.downloader import TypePlaylist
 
 config = configparser.ConfigParser()
 config.read("../config.ini")

@@ -2,7 +2,7 @@ import os
 
 import youtube_dl
 
-from playlistdownloader.playlist.PlaylistStrategy import PlaylistStrategyAbstract
+from playlist_downloader.playlist.PlaylistStrategy import PlaylistStrategyAbstract
 
 
 class SoundCloudPlaylist(PlaylistStrategyAbstract):

@@ -1,4 +1,4 @@
-from playlistdownloader.downloader import PlaylistDownloader
+from playlist_downloader.downloader import PlaylistDownloader
 
 
 class DownloaderService:

@@ -1,13 +1,15 @@
 import os
 
+import httpx
 import youtube_dl
+from bs4 import BeautifulSoup
 
-from playlistdownloader.PlaylistStrategy import PlaylistStrategyAbstract
+from playlist_downloader.playlist.PlaylistStrategy import PlaylistStrategyAbstract
 
 
-class SongNamePlaylist(PlaylistStrategyAbstract):
+class YoutubePlaylist(PlaylistStrategyAbstract):
     """
-    Strategy used when there no link only a song name
+    Strategy used for youtube link (normal video or playlist)
     """
 
     def __init__(self):
@@ -21,7 +23,7 @@ class SongNamePlaylist(PlaylistStrategyAbstract):
         :param decode:
         :return:
         """
-        if os.path.isfile(fname) and self.loaded_playlist is not None:
+        if os.path.isfile(fname) and not self.loaded_playlist:
             with open(fname) as fp:
                 lines = fp.read().split(decode)  # Create a list containing all lines
             self.loaded_playlist = lines
@@ -29,8 +31,7 @@ class SongNamePlaylist(PlaylistStrategyAbstract):
 
     def download_song(self, link, out=".", quality=1):
         """
-        TODO change this to a youtube-dl python function
-        youtube-dl can do this also
+        # TODO fix error or use the console method or put subprocess
         :param link:
         :param out:
         :param quality:
@@ -48,10 +49,7 @@ class SongNamePlaylist(PlaylistStrategyAbstract):
                     "-o",
                     f"{out}/%(title)s.%(ext)s",
                     link,
-                    "--no-playlist",
                     "-i",
-                    "--default-search",
-                    "ytsearch",
                     "-q",
                     "--no-progress ",
                 ]
@@ -72,3 +70,31 @@ class SongNamePlaylist(PlaylistStrategyAbstract):
 
             with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                 ydl.download([link])
+
+    @staticmethod
+    def write_youtube_playlist(url, out):
+        """
+
+        :param url:
+        :param out:
+        :return:
+        """
+        page = httpx.get(url)
+        soup = BeautifulSoup(page.read(), "html.parser")
+        href_tags = soup.find_all("a", {"class": "pl-video-title-link"}, href=True)
+
+        with open(out, "w") as f:
+            for i in href_tags:
+                f.write(f'https://www.youtube.com{i["href"]}\n')
+        f.close()
+
+    @staticmethod
+    def clean_y_dl():
+        """
+        TODO remove this method
+        :return:
+        """
+        current = os.listdir(".")
+        for file in current:
+            if file.endswith(("mkv", "webm", ".part")):
+                os.remove(file)

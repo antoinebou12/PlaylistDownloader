@@ -7,8 +7,6 @@ import os
 from concurrent.futures import as_completed
 from concurrent.futures.thread import ThreadPoolExecutor
 
-from playlistdownloader.playlist.Song import SongNamePlaylistFile
-
 
 # Strategy Pattern
 class PlaylistStrategyAbstract:
@@ -35,8 +33,8 @@ class PlaylistStrategyAbstract:
 
 
 class MusicDownloader:
-    def __init__(self, strategy):
-        self.strategy = strategy
+    def __init__(self, *args, **kwargs):
+        self.strategy = kwargs.get("strategy")
 
     def load_playlist(self, *args, **kwargs):
         return self.strategy.load_playlist(*args, **kwargs)
@@ -56,11 +54,3 @@ class MusicDownloader:
 
             for future in as_completed(futures):
                 future.result()
-
-
-if __name__ == "__main__":
-    text_file_downloader = MusicDownloader(SongNamePlaylistFile())
-    text_file_downloader.load_playlist("song_list.txt")
-    text_file_downloader.download_all(
-        out_dir="downloaded_music", quality=1, max_workers=5
-    )
