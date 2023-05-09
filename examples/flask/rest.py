@@ -14,7 +14,7 @@ config.read('../config.ini')
 COMPRESSION = bool(config['DEFAULT']['Compression'])
 UPLOAD_FOLDER = config['DEFAULT']['UploadFolder']
 DOWNLOAD_FOLDER = config['DEFAULT']['DownloadFolder']
-ALLOWED_EXTENSIONS = set(['txt'])
+ALLOWED_EXTENSIONS = {'txt'}
 
 # Spotipy Client ID
 SPOTIPYCLIENTID = config['Spotify']['spotipyclientid']
@@ -43,7 +43,7 @@ class SoundCloudDownloader(Resource):
         self._ids = next(self._ids)
 
         PLD_soundcloud = PlaylistDownloader("soundcloud", playlist_type=TypePlaylist.SOUNDCLOUD.value)
-        soundcloud_list = PLD_soundcloud.load_playlist("{}/{}".format(UPLOAD_FOLDER, inputname))
+        soundcloud_list = PLD_soundcloud.load_playlist(f"{UPLOAD_FOLDER}/{inputname}")
         PLD_soundcloud.download_playlist(soundcloud_list, "download/soundcloud_%d/" % self._ids, compress=COMPRESSION)
 
         return {'fname': "soundcloud_%d.zip" % self._ids}
@@ -58,7 +58,7 @@ class YoutubeDownloader(Resource):
         self._ids = next(self._ids)
 
         PLD_youtube = PlaylistDownloader(playlist_type=TypePlaylist.YOUTUBE.value)
-        youtube_list = PLD_youtube.load_playlist("{}/{}".format(UPLOAD_FOLDER, inputname))
+        youtube_list = PLD_youtube.load_playlist(f"{UPLOAD_FOLDER}/{inputname}")
         PLD_youtube.download_playlist(youtube_list, "download/youtube_%d/" % self._ids, compress=COMPRESSION)
 
         return {'fname': "youtube_%d.zip" % self._ids}
@@ -73,7 +73,7 @@ class SpotifyDownloader(Resource):
         self._ids = next(self._ids)
 
         PLD_spotify = PlaylistDownloader(playlist_type=TypePlaylist.SPOTIFY.value, spotipyid=SPOTIPYCLIENTID, spotipysecret=SPOTIPYCLIENTSECRET)
-        spotify_list = PLD_spotify.load_playlist("{}/{}".format(UPLOAD_FOLDER, inputname))
+        spotify_list = PLD_spotify.load_playlist(f"{UPLOAD_FOLDER}/{inputname}")
         PLD_spotify.download_playlist(spotify_list, "download/spotify_%d/" % self._ids, compress=COMPRESSION)
 
         return {'fname': "spotify_%d.zip" % self._ids}
@@ -88,7 +88,7 @@ class Downloader(Resource):
         self._ids = next(self._ids)
 
         PLD = PlaylistDownloader(spotipyid=SPOTIPYCLIENTID, spotipysecret=SPOTIPYCLIENTSECRET)
-        playlist = PLD.load_playlist("{}/{}".format(UPLOAD_FOLDER, inputname))
+        playlist = PLD.load_playlist(f"{UPLOAD_FOLDER}/{inputname}")
         PLD.download_playlist(playlist, "download/downloader_%d" % self._ids, compress=COMPRESSION)
 
         return {'fname': "downloader_%d.zip" % self._ids}
@@ -98,9 +98,7 @@ class UploadFile(Resource):
     _ids = count(0)
 
     def post(self):
-        file = None
-        if 'file' in request.files:
-            file = request.files['file']
+        file = request.files['file'] if 'file' in request.files else None
         if file and self.allowed_file(file.filename):
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))

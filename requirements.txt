@@ -1,9 +1,0 @@
-argparse
-argcomplete
-numpy>=1.15.1
-youtube-dl
-spotipy
-# scdl
-bs4
-flask_restful
-configparser

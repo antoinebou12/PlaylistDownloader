@@ -1,13 +1,9 @@
-from unittest import TestCase
 import pytest
-
 import os
-import tempfile
 import shutil
 import configparser
 
 from playlistdownloader.downloader import SoundCloudPlaylistFile, YoutubePlaylistFile, SpotifyPlaylistFile
-
 
 class UtilsFunc(object):
 
@@ -22,76 +18,82 @@ class UtilsFunc(object):
 
     @staticmethod
     def list_fname_dir(dirname):
-        files = []
-        for file in os.listdir(dirname):
-            files.append(file)
-        return files
+        return list(os.listdir(dirname))
 
 
-class TestSoundCloudPlaylistFile(TestCase):
+@pytest.fixture
+def soundcloud():
+    return SoundCloudPlaylistFile()
 
-    def setUp(self):
-        self.soundcloud = SoundCloudPlaylistFile()
-        self.load_playlist = self.soundcloud.load_playlist(os.getcwd() + "/tests/data/soundcloud-list.txt")
-        self.dirpath = tempfile.mkdtemp()
 
-    def test_load_playlist(self):
-        assert set(self.load_playlist) == set(UtilsFunc.read_file_to_list(os.getcwd() + "/tests/data/soundcloud-list.txt"))
+@pytest.fixture
+def youtube():
+    return YoutubePlaylistFile()
 
-    def test_load_playlist_FileNotFoundError(self):
+
+@pytest.fixture
+def spotify():
+    return SpotifyPlaylistFile()
+
+
+class TestSoundCloudPlaylistFile:
+
+    def test_load_playlist(self, soundcloud):
+        load_playlist = soundcloud.load_playlist(
+            f"{os.getcwd()}/tests/data/soundcloud-list.txt"
+        )
+        assert set(load_playlist) == set(
+            UtilsFunc.read_file_to_list(
+                f"{os.getcwd()}/tests/data/soundcloud-list.txt"
+            )
+        )
+
+    def test_load_playlist_FileNotFoundError(self, soundcloud):
         with pytest.raises(FileNotFoundError):
-            self.soundcloud.load_playlist(os.getcwd() + "tests/data/no.txt")
+            soundcloud.load_playlist(f"{os.getcwd()}tests/data/no.txt")
 
-    def test_download_song(self):
+    def test_download_song(self, soundcloud, tmpdir):
+        load_playlist = soundcloud.load_playlist(
+            f"{os.getcwd()}/tests/data/soundcloud-list.txt"
+        )
+        soundcloud.download_song(load_playlist[0], tmpdir)
+        assert UtilsFunc.list_fname_dir(tmpdir)[0] == "L O N G    B E A C H.mp3"
 
-        self.soundcloud.download_song(self.load_playlist[0], self.dirpath)
-        assert UtilsFunc.list_fname_dir(self.dirpath)[0] == "L O N G    B E A C H.mp3"
 
-    def tearDown(self):
-        shutil.rmtree(self.dirpath)
+class TestYoutubePlaylistFile:
 
+    def test_load_playlist(self, youtube):
+        load_playlist = youtube.load_playlist(
+            f"{os.getcwd()}/tests/data/youtube-playlist.txt"
+        )
+        assert set(load_playlist) == set(
+            UtilsFunc.read_file_to_list(
+                f"{os.getcwd()}/tests/data/youtube-playlist.txt"
+            )
+        )
 
-class TestYoutubePlaylistFile(TestCase):
-
-    def setUp(self):
-        self.youtube = YoutubePlaylistFile()
-        self.load_playlist = self.youtube.load_playlist(os.getcwd() + "/tests/data/youtube-playlist.txt")
-        self.dirpath = tempfile.mkdtemp()
-
-    def test_load_playlist(self):
-        assert set(self.load_playlist) == set(UtilsFunc.read_file_to_list(os.getcwd() + "/tests/data/youtube-playlist.txt"))
-
-    def test_load_playlist_FileNotFoundError(self):
+    def test_load_playlist_FileNotFoundError(self, youtube):
         with pytest.raises(FileNotFoundError):
-            self.youtube.load_playlist(os.getcwd() + "tests/data/no.txt")
+            youtube.load_playlist(f"{os.getcwd()}tests/data/no.txt")
 
-    def test_download_song(self):
-        self.youtube.download_song(self.load_playlist[0], self.dirpath)
-        assert UtilsFunc.list_fname_dir(self.dirpath)[0] == "Darude - Sandstorm.mp3"
+    def test_download_song(self, youtube, tmpdir):
+        load_playlist = youtube.load_playlist(
+            f"{os.getcwd()}/tests/data/youtube-playlist.txt"
+        )
+        youtube.download_song(load_playlist[0], tmpdir)
+        assert UtilsFunc.list_fname_dir(tmpdir)[0] == "Darude - Sandstorm.mp3"
 
-    def tearDown(self):
-        shutil.rmtree(self.dirpath)
 
+class TestSpotifyPlaylistFile:
 
-# TODO Write test for spotify with api key
-class TestSpotifyPlaylistFile(TestCase):
-
-    def setUp(self):
-        self.spotify = SpotifyPlaylistFile()
-
-    def test_login_spotipy(self):
+    def test_login_spotipy(self, spotify):
         assert True
 
-    def test_load_playlist(self):
+    def test_load_playlist(self, spotify):
         assert True
 
-    def test_tracks_playlist(self):
+    def test_tracks_playlist(self, spotify):
         assert True
 
-    def test_download_song(self):
+    def test_download_song(self, spotify):
         assert True
-
-    def tearDown(self):
-        assert True
-
-
