@@ -1,9 +1,13 @@
-from fastapi import APIRouter, UploadFile, File, HTTPException
+from fastapi import APIRouter
+from fastapi import File
+from fastapi import HTTPException
+from fastapi import UploadFile
 from services import upload
 
 router = APIRouter()
 
-@router.post('/')
+
+@router.post("/")
 async def upload_file(file: UploadFile = File(...)):
     result = await upload.save_file(file)
     if result:

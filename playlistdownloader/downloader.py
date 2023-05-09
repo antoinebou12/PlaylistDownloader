@@ -1,16 +1,26 @@
-from __future__ import unicode_literals
-import os
 import shutil
 import zipfile
-from concurrent.futures import as_completed, ThreadPoolExecutor
+from concurrent.futures import as_completed
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-from playlistdownloader import recognition_link, TypePlaylist, SongNamePlaylistFile, SoundCloudPlaylistFile, \
-    YoutubePlaylistFile, SpotifyPlaylistFile, zipdir
+from playlistdownloader import recognition_link
+from playlistdownloader import SongNamePlaylistFile
+from playlistdownloader import SoundCloudPlaylistFile
+from playlistdownloader import SpotifyPlaylistFile
+from playlistdownloader import TypePlaylist
+from playlistdownloader import YoutubePlaylistFile
+from playlistdownloader import zipdir
 
 
 class PlaylistDownloader:
-    def __init__(self, out: str = "", playlist_type: int = TypePlaylist.YOUTUBE.value, spotipyid: str = None, spotipysecret: str = None):
+    def __init__(
+        self,
+        out: str = "",
+        playlist_type: int = TypePlaylist.YOUTUBE.value,
+        spotipyid: str = None,
+        spotipysecret: str = None,
+    ):
         self._out = out
         self.spotipyid = spotipyid
         self.spotipysecret = spotipysecret
@@ -19,7 +29,7 @@ class PlaylistDownloader:
             TypePlaylist.SONG_NAME.value: SongNamePlaylistFile(),
             TypePlaylist.SOUNDCLOUD.value: SoundCloudPlaylistFile(),
             TypePlaylist.YOUTUBE.value: YoutubePlaylistFile(),
-            TypePlaylist.SPOTIFY.value: SpotifyPlaylistFile(spotipyid, spotipysecret)
+            TypePlaylist.SPOTIFY.value: SpotifyPlaylistFile(spotipyid, spotipysecret),
         }
 
         self._type_strategy = strategies.get(playlist_type, SongNamePlaylistFile())
@@ -30,7 +40,9 @@ class PlaylistDownloader:
     def download_song(self, *args, **kwargs):
         return self.type_strategy.download_song(*args, **kwargs)
 
-    def download_playlist(self, playlist: list, out: str = "output", compress: bool = False) -> None:
+    def download_playlist(
+        self, playlist: list, out: str = "output", compress: bool = False
+    ) -> None:
         out_path = Path(out)
         out_path.mkdir(exist_ok=True)
 
@@ -52,7 +64,7 @@ class PlaylistDownloader:
                             print(f"({i + 1}/{len(playlist)}) {name}")
 
         if compress:
-            with zipfile.ZipFile(f'{out}.zip', 'w', zipfile.ZIP_DEFLATED) as zipf:
+            with zipfile.ZipFile(f"{out}.zip", "w", zipfile.ZIP_DEFLATED) as zipf:
                 zipdir(out, zipf)
             shutil.rmtree(out)
 

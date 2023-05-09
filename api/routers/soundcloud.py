@@ -3,6 +3,7 @@ from services import soundcloud
 
 router = APIRouter()
 
-@router.get('/{inputname}')
+
+@router.get("/{inputname}")
 async def soundcloud_downloader(inputname: str):
     return await soundcloud.download(inputname)

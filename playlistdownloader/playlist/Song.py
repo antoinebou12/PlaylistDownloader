@@ -9,8 +9,9 @@ class SongNamePlaylist(PlaylistStrategyAbstract):
     """
     Strategy used when there no link only a song name
     """
+
     def __init__(self):
-        super(SongNamePlaylist, self).__init__()
+        super().__init__()
         self.loaded_playlist = None
 
     def load_playlist(self, fname, decode="\n"):
@@ -55,16 +56,16 @@ class SongNamePlaylist(PlaylistStrategyAbstract):
                     "--no-progress ",
                 ]
             )
-        except Exception as e:
+        except Exception:
             ydl_opts = {
-                'outtmpl': f"{out}/%(title)s.%(ext)s",
-                'verbose': False,
-                'format': 'bestaudio/best',
-                'postprocessors': [
+                "outtmpl": f"{out}/%(title)s.%(ext)s",
+                "verbose": False,
+                "format": "bestaudio/best",
+                "postprocessors": [
                     {
-                        'key': 'FFmpegExtractAudio',
-                        'preferredcodec': 'mp3',
-                        'preferredquality': '192',
+                        "key": "FFmpegExtractAudio",
+                        "preferredcodec": "mp3",
+                        "preferredquality": "192",
                     }
                 ],
             }

@@ -1,4 +1,5 @@
 import os
+
 import youtube_dl
 
 from playlistdownloader.playlist.PlaylistStrategy import PlaylistStrategyAbstract
@@ -8,8 +9,9 @@ class SoundCloudPlaylist(PlaylistStrategyAbstract):
     """
     Strategy used for soundcloud link
     """
+
     def __init__(self):
-        super(SoundCloudPlaylist, self).__init__()
+        super().__init__()
         self.loaded_playlist = None
 
     def load_playlist(self, fname, decode="\n"):
@@ -34,8 +36,20 @@ class SoundCloudPlaylist(PlaylistStrategyAbstract):
         :return:
         """
         try:
-            os.subprocess.call(["scdl", "-l", link, "--path", out, "--onlymp3", "-c", "--error", "--remove"])
-        except Exception as e:
+            os.subprocess.call(
+                [
+                    "scdl",
+                    "-l",
+                    link,
+                    "--path",
+                    out,
+                    "--onlymp3",
+                    "-c",
+                    "--error",
+                    "--remove",
+                ]
+            )
+        except Exception:
             try:
                 os.subprocess.call(
                     [
@@ -54,16 +68,16 @@ class SoundCloudPlaylist(PlaylistStrategyAbstract):
                         "--no-progress ",
                     ]
                 )
-            except Exception as e:
+            except Exception:
                 ydl_opts = {
-                    'outtmpl': f"{out}/%(title)s.%(ext)s",
-                    'verbose': False,
-                    'format': 'bestaudio/best',
-                    'postprocessors': [
+                    "outtmpl": f"{out}/%(title)s.%(ext)s",
+                    "verbose": False,
+                    "format": "bestaudio/best",
+                    "postprocessors": [
                         {
-                            'key': 'FFmpegExtractAudio',
-                            'preferredcodec': 'mp3',
-                            'preferredquality': '192',
+                            "key": "FFmpegExtractAudio",
+                            "preferredcodec": "mp3",
+                            "preferredquality": "192",
                         }
                     ],
                 }

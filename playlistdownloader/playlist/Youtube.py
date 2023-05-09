@@ -1,7 +1,8 @@
 import os
-from bs4 import BeautifulSoup
+
 import httpx
 import youtube_dl
+from bs4 import BeautifulSoup
 
 from playlistdownloader.playlist.PlaylistStrategy import PlaylistStrategyAbstract
 
@@ -10,8 +11,9 @@ class YoutubePlaylistFile(PlaylistStrategyAbstract):
     """
     Strategy used for youtube link (normal video or playlist)
     """
+
     def __init__(self):
-        super(YoutubePlaylistFile, self).__init__()
+        super().__init__()
         self.loaded_playlist = None
 
     def load_playlist(self, fname, decode="\n"):
@@ -52,24 +54,22 @@ class YoutubePlaylistFile(PlaylistStrategyAbstract):
                     "--no-progress ",
                 ]
             )
-        except Exception as e:
-
+        except Exception:
             ydl_opts = {
-                'outtmpl': f"{out}/%(title)s.%(ext)s",
-                'verbose': False,
-                'format': 'bestaudio/best',
-                'postprocessors': [
+                "outtmpl": f"{out}/%(title)s.%(ext)s",
+                "verbose": False,
+                "format": "bestaudio/best",
+                "postprocessors": [
                     {
-                        'key': 'FFmpegExtractAudio',
-                        'preferredcodec': 'mp3',
-                        'preferredquality': '192',
+                        "key": "FFmpegExtractAudio",
+                        "preferredcodec": "mp3",
+                        "preferredquality": "192",
                     }
                 ],
             }
 
             with youtube_dl.YoutubeDL(ydl_opts) as ydl:
                 ydl.download([link])
-
 
     @staticmethod
     def write_youtube_playlist(url, out):
@@ -81,11 +81,11 @@ class YoutubePlaylistFile(PlaylistStrategyAbstract):
         """
         page = httpx.get(url)
         soup = BeautifulSoup(page.read(), "html.parser")
-        href_tags = soup.find_all('a', {'class': 'pl-video-title-link'}, href=True)
+        href_tags = soup.find_all("a", {"class": "pl-video-title-link"}, href=True)
 
-        with open(out, 'w') as f:
+        with open(out, "w") as f:
             for i in href_tags:
-                f.write("%s%s\n" % ("https://www.youtube.com", i['href']))
+                f.write("{}{}\n".format("https://www.youtube.com", i["href"]))
         f.close()
 
     @staticmethod
@@ -94,7 +94,7 @@ class YoutubePlaylistFile(PlaylistStrategyAbstract):
         TODO remove this method
         :return:
         """
-        current = os.listdir('.')
+        current = os.listdir(".")
         for file in current:
             if file.endswith(("mkv", "webm", ".part")):
                 os.remove(file)

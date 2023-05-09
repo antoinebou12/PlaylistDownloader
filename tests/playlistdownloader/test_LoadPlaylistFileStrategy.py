@@ -1,12 +1,13 @@
-import pytest
 import os
-import shutil
-import configparser
 
-from playlistdownloader.downloader import SoundCloudPlaylistFile, YoutubePlaylistFile, SpotifyPlaylistFile
+import pytest
 
-class UtilsFunc(object):
+from playlistdownloader.downloader import SoundCloudPlaylistFile
+from playlistdownloader.downloader import SpotifyPlaylistFile
+from playlistdownloader.downloader import YoutubePlaylistFile
 
+
+class UtilsFunc:
     @staticmethod
     def read_file_to_list(fname):
         if os.path.isfile(fname):
@@ -37,15 +38,12 @@ def spotify():
 
 
 class TestSoundCloudPlaylistFile:
-
     def test_load_playlist(self, soundcloud):
         load_playlist = soundcloud.load_playlist(
             f"{os.getcwd()}/tests/data/soundcloud-list.txt"
         )
         assert set(load_playlist) == set(
-            UtilsFunc.read_file_to_list(
-                f"{os.getcwd()}/tests/data/soundcloud-list.txt"
-            )
+            UtilsFunc.read_file_to_list(f"{os.getcwd()}/tests/data/soundcloud-list.txt")
         )
 
     def test_load_playlist_FileNotFoundError(self, soundcloud):
@@ -61,7 +59,6 @@ class TestSoundCloudPlaylistFile:
 
 
 class TestYoutubePlaylistFile:
-
     def test_load_playlist(self, youtube):
         load_playlist = youtube.load_playlist(
             f"{os.getcwd()}/tests/data/youtube-playlist.txt"
@@ -85,7 +82,6 @@ class TestYoutubePlaylistFile:
 
 
 class TestSpotifyPlaylistFile:
-
     def test_login_spotipy(self, spotify):
         assert True
 

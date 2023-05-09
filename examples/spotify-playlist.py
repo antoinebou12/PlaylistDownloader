@@ -1,26 +1,33 @@
-import typer
 import configparser
 
-from playlistdownloader.downloader import PlaylistDownloader, TypePlaylist
+import typer
+
+from playlistdownloader.downloader import PlaylistDownloader
+from playlistdownloader.downloader import TypePlaylist
 
 config = configparser.ConfigParser()
-config.read('../spotipy_api_key.ini')
+config.read("../spotipy_api_key.ini")
 
 # Spotipy Client ID
-SPOTIPYCLIENTID = config['Spotify']['spotipyclientid']
-SPOTIPYCLIENTSECRET = config['Spotify']['spotipyclientsecret']
+SPOTIPYCLIENTID = config["Spotify"]["spotipyclientid"]
+SPOTIPYCLIENTSECRET = config["Spotify"]["spotipyclientsecret"]
 
 app = typer.Typer()
 
+
 @app.command()
 def main(
-    input: str = typer.Argument(..., help='link or filename'),
-    output: str = typer.Option("spotify", help='output folder'),
-    spotipyid: str = typer.Option(SPOTIPYCLIENTID, help='spotipy client-id'),
-    spotipysecret: str = typer.Option(SPOTIPYCLIENTSECRET, help='spotipy client-secret'),
+    input: str = typer.Argument(..., help="link or filename"),
+    output: str = typer.Option("spotify", help="output folder"),
+    spotipyid: str = typer.Option(SPOTIPYCLIENTID, help="spotipy client-id"),
+    spotipysecret: str = typer.Option(
+        SPOTIPYCLIENTSECRET, help="spotipy client-secret"
+    ),
 ):
     PLD_spotify = PlaylistDownloader(
-        playlist_type=TypePlaylist.SPOTIFY.value, spotipyid=spotipyid, spotipysecret=spotipysecret
+        playlist_type=TypePlaylist.SPOTIFY.value,
+        spotipyid=spotipyid,
+        spotipysecret=spotipysecret,
     )
 
     playlist = PLD_spotify.load_playlist(input)

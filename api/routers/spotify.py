@@ -3,6 +3,7 @@ from services import spotify
 
 router = APIRouter()
 
-@router.get('/{inputname}')
+
+@router.get("/{inputname}")
 async def spotify_downloader(inputname: str):
     return await spotify.download(inputname)

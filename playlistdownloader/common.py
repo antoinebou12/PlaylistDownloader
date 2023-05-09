@@ -18,20 +18,22 @@ def zipdir(path: str, ziph: ZipFile) -> None:
 
 
 def recognition_link(link: str) -> str:
-    main_url = re.findall('https?://(?:[-\w.]|(?:%[\da-fA-F]{2}))+', link)
+    main_url = re.findall(r"https?://(?:[-\w.]|(?:%[\da-fA-F]{2}))+", link)
     if not main_url:
         return TypePlaylist.SONG_NAME.value
 
     main_url = main_url[0]
 
-    if main_url == 'https://soundcloud.com':
+    if main_url == "https://soundcloud.com":
         return TypePlaylist.SOUNDCLOUD.value
 
-    if main_url == 'https://www.youtube.com':
-        if re.findall('(?<![\w\d])watch(?![\w\d])', link) or re.findall('(?<![\w\d])playlist(?![\w\d])', link):
+    if main_url == "https://www.youtube.com":
+        if re.findall(r"(?<![\w\d])watch(?![\w\d])", link) or re.findall(
+            r"(?<![\w\d])playlist(?![\w\d])", link
+        ):
             return TypePlaylist.YOUTUBE.value
 
-    if main_url == 'https://open.spotify.com':
+    if main_url == "https://open.spotify.com":
         return TypePlaylist.SPOTIFY.value
 
     return TypePlaylist.OTHER.value
@@ -52,5 +54,5 @@ class MyLogger:
 
 
 def progress_hook_ydl(d: dict) -> None:
-    if d['status'] == 'finished':
-        print('Done downloading, now converting ...')
+    if d["status"] == "finished":
+        print("Done downloading, now converting ...")

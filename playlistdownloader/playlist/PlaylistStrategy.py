@@ -2,23 +2,21 @@
 This script is a command-line tool for downloading playlists from various sources like Spotify, YouTube, SoundCloud, or even from a text file containing song names.
 It uses the strategy pattern to define different strategies for loading and downloading playlists from various sources
 """
-
 import abc  # Python's built-in abstract class library
-
 import os
 from concurrent.futures import as_completed
 from concurrent.futures.thread import ThreadPoolExecutor
-from playlistdownloader.playlist.Song import SongNamePlaylistFile
 
-from bs4 import BeautifulSoup
+from playlistdownloader.playlist.Song import SongNamePlaylistFile
 
 
 # Strategy Pattern
-class PlaylistStrategyAbstract(object):
+class PlaylistStrategyAbstract:
 
     """You do not need to know about metaclasses.
     Just know that this is how you define abstract
     classes in Python."""
+
     __metaclass__ = abc.ABCMeta
 
     @abc.abstractmethod
@@ -34,6 +32,7 @@ class PlaylistStrategyAbstract(object):
         :param args: args based on the specific strategy
         :param kwargs: kwargs based on the specific strategy
         """
+
 
 class MusicDownloader:
     def __init__(self, strategy):
@@ -62,4 +61,6 @@ class MusicDownloader:
 if __name__ == "__main__":
     text_file_downloader = MusicDownloader(SongNamePlaylistFile())
     text_file_downloader.load_playlist("song_list.txt")
-    text_file_downloader.download_all(out_dir="downloaded_music", quality=1, max_workers=5)
+    text_file_downloader.download_all(
+        out_dir="downloaded_music", quality=1, max_workers=5
+    )
