@@ -1,52 +1,41 @@
-#!/usr/bin/env python3
-import argparse
-import argcomplete
 import configparser
+
+import typer
+from rich.console import Console
 
 from playlistdownloader.downloader import PlaylistDownloader
 
 config = configparser.ConfigParser()
-config.read('spotipy_api_key.ini')
+config.read("spotipy_api_key.ini")
 
 # Spotipy Client ID
-SPOTIPYCLIENTID = config.get('SPOTIFY', 'spotipyclientid')
-SPOTIPYCLIENTSECRET = config.get('SPOTIFY', 'spotipyclientsecret')
+SPOTIPYCLIENTID = config.get("SPOTIFY", "spotipyclientid")
+SPOTIPYCLIENTSECRET = config.get("SPOTIFY", "spotipyclientsecret")
 
-class Main(object):
-    def __init__(self):
-        super(Main, self).__init__()
+app = typer.Typer()
 
-        # main
-        self.args()
-        self.main()
-
-        self._args = None
-
-    @staticmethod
-    def _parser():
-        parser = argparse.ArgumentParser(description='.raw file to .tiff file format')
-        parser.add_argument("input", type=str, help='input file to check for new raw file')
-        parser.add_argument("--output", default="youtube", type=str, help='output folder to check for new tiff file')
-        parser.add_argument("--spotipyid", default=SPOTIPYCLIENTID, type=str,
-                            help='spotipy client-id')
-        parser.add_argument("--spotipysecret", default=SPOTIPYCLIENTSECRET, type=str,
-                            help='spotipy client-secret')
-
-        return parser
-
-    def args(self):
-        # command line argument
-        parser = self._parser()
-        argcomplete.autocomplete(parser)
-        self._args = self._parser().parse_args()
-
-    def main(self):
-        PLD = PlaylistDownloader(spotipyid=self._args.spotipyid, spotipysecret=self._args.spotipysecret)
-        # load the list of list
-        song_list_link = PLD.load_playlist(self._args.input)
-
-        PLD.download_playlist(song_list_link, out=self._args.output, compress=False)
+console = Console()
 
 
-if __name__ == '__main__':
-    Main()
+@app.command()
+def main(
+    input: str = typer.Argument(..., help="input file to check for new raw file"),
+    output: str = typer.Option(
+        "youtube", help="output folder to check for new tiff file"
+    ),
+    spotipyid: str = typer.Option(SPOTIPYCLIENTID, help="spotipy client-id"),
+    spotipysecret: str = typer.Option(
+        SPOTIPYCLIENTSECRET, help="spotipy client-secret"
+    ),
+):
+    PLD = PlaylistDownloader(spotipyid=spotipyid, spotipysecret=spotipysecret)
+    # load the list of list
+    song_list_link = PLD.load_playlist(input)
+
+    PLD.download_playlist(song_list_link, out=output, compress=False)
+
+    console.print("[green]Done![/green]")
+
+
+if __name__ == "__main__":
+    app()

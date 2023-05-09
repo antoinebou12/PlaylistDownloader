@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>PlaylistDownloader</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+</head>
+
+<body>
+
+    <div>
+        <h1>Playlist Downloader</h1>
+        <ul class="container">
+            <li>Choose file</li>
+            <li>Upload or Modify and save it and rechoose the new file</li>
+            <li>Download playlist with the name filename with extension</li>
+        </ul>
+        <div class="container form-inline">
+            <form method="POST" action="http://vps245309.vps.ovh.ca:5000/api/upload" enctype=multipart/form-data
+                target="formDestination">
+                <div class="custom-control-inline mb-3">
+                    <div class="custom-file file-upload-wrapper">
+                        <input class="form-control custom-file-input file-upload" type="file" id="file" name="file"
+                            oninput="readFile()" accept=".txt" />
+                        <label class="custom-file-label" for="file">Drag & Drop a File</label>
+                    </div>
+                    <input class="form-control" type="submit" value="Upload">
+                </div>
+
+            </form>
+        </div>
+
+        <div class="container md-form">
+            <label for="file_content">File Content:</label><br /><textarea class="form-control" rows="10" cols="240"
+                id="file_content"></textarea>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm">
+                        <button class="form-control" id="read" onclick="readFile()">Read File</button>
+                    </div>
+                    <div class="col-sm">
+                        <button class="form-control" id="save" onclick="writeFile()">Save File</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <br />
+
+        <div class="container form-inline">
+            <input class="form-control" id="pfname" placeholder="filename uploaded with ext" size="50">
+            <button class="form-control" id="download" onclick="downloadPlaylist()">Download Playlist</button>
+        </div>
+
+        <div class="container embed-responsive embed-responsive-1by1">
+            <iframe class="embed-responsive-item" id="apiframe" name="formDestination" scrolling="no"></iframe>
+        </div>
+
+        <div id="apianswer"></div>
+
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.7.8/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        crossorigin="anonymous"></script>
+
+    <script>
+
+        const apiUrlBase = 'http://vps245309.vps.ovh.ca:5000';
+
+        function readFile() {
+
+            //check if there a file
+            let files = document.getElementById('file').files;
+            if (!files.length) {
+                alert('Please select a file!');
+                return;
+            }
+
+            let file = files[0];
+
+            let reader = new FileReader();
+
+            // If we use onloadend, we need to check the readyState.
+            reader.onloadend = function (evt) {
+                if (evt.target.readyState === FileReader.DONE) { // DONE == 2
+                    let content = evt.target.result;
+                    document.getElementById('file_content').value = content;
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // https://stackoverflow.com/questions/21479107/saving-html5-textarea-contents-to-file
+        function writeFile() {
+            let text = document.getElementById("file_content").value;
+            text = text.replace(/\n/g, "\r\n"); // To retain the Line breaks.
+            let blob = new Blob([text], { type: "text/plain" });
+            let anchor = document.createElement("a");
+            anchor.download = "playlist.txt";
+            anchor.href = window.URL.createObjectURL(blob);
+            anchor.target = "_blank";
+            anchor.style.display = "none"; // just to be safe!
+            document.body.appendChild(anchor);
+            anchor.click();
+            document.body.removeChild(anchor);
+        }
+
+        // https://stackoverflow.com/questions/21479107/saving-html5-textarea-contents-to-file
+        function downloadPlaylist() {
+            let text = document.getElementById("pfname").value;
+            const urlAPI = apiUrlBase + '/api/downloader/' + text;
+            let request = $.ajax({
+                url: urlAPI,
+                type: 'GET',
+                success: function (data) {
+                    document.getElementById("apiframe").src = apiUrlBase + '/api/playlist/' + data['fname'];
+                },
+                error: function () {
+                    alert('Error occured');
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
