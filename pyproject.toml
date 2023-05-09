@@ -7,7 +7,7 @@ license = "MIT"
 readme = "README.md"
 repository = "https://github.com/antoinebou12/playlistdownloader"
 homepage = "https://github.com/antoinebou12/playlistdownloader"
-documentation = "http://github.com/antoineboucher/marketwatch/wiki"
+documentation = "https://github.com/antoinebou12/playlistdownloader"
 keywords = ["youtube", "spotify", "playlist", "downloader", "music", "mp3"]
 classifiers = [
     "Development Status :: 4 - Beta",
